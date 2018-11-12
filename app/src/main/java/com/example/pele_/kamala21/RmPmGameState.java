@@ -355,8 +355,9 @@ public class RmPmGameState {
     public void dumbAi(int playerIndex){
         if(this.selectCard(playerIndex, 0)){
             this.playSet(playerIndex);
+            this.getPlayerSet().clear();
         } else{
-            passTurn(playerIndex);
+            this.passTurn(playerIndex);
         }
     }
 }
