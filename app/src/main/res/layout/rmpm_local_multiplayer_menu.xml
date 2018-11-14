@@ -136,7 +136,7 @@
                         android:layout_weight="1"
                         android:background="@android:color/white"
                         android:gravity="center"
-                        android:text="Dumb AI"
+                        android:text="dumb"
                         android:textSize="20sp" />
 
                     <Button

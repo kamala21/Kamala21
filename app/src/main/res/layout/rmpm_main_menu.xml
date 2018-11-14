@@ -52,19 +52,53 @@
                     android:backgroundTint="@color/neon_green"
                     android:text="Play Single Player" />
 
-                <Button
-                    android:id="@+id/mmLocalButton"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/neon_green"
-                    android:text="Start Server" />
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/mmJoinButton"
+                    <Button
+                        android:id="@+id/mmLocalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/neon_green"
+                        android:text="Start Server" />
+
+                    <EditText
+                        android:id="@+id/mmStartID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/neon_green"
+                        android:ems="10"
+                        android:hint="ServerID"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/neon_green"
-                    android:text="Join Server" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/mmJoinButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/neon_green"
+                        android:text="Join Server" />
+
+                    <EditText
+                        android:id="@+id/mmJoinID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/neon_green"
+                        android:ems="10"
+                        android:hint="ServerID"
+                        android:inputType="textPersonName" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/mmRulesButton"

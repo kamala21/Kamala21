@@ -15,7 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class lmmActivity extends Activity implements  View.OnClickListener{
+public class lmmActivity extends Activity implements View.OnClickListener {
     Button returnButton;
     Button startButton;
     Button increaseButton;
@@ -30,6 +30,7 @@ public class lmmActivity extends Activity implements  View.OnClickListener{
     int numAiInt;
     int numHumanInt;
     int playerIndex;
+    String serverID;
 
     FirebaseDatabase database;
     DatabaseReference lobbyRef;
@@ -40,39 +41,40 @@ public class lmmActivity extends Activity implements  View.OnClickListener{
     DatabaseReference numAiRef;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_local_multiplayer_menu);
 
-        returnButton = (Button)findViewById(R.id.lmmReturnButton);
+        returnButton = (Button) findViewById(R.id.lmmReturnButton);
         returnButton.setOnClickListener(this);
-        startButton = (Button)findViewById(R.id.lmmStartServerButton);
+        startButton = (Button) findViewById(R.id.lmmStartServerButton);
         startButton.setOnClickListener(this);
-        increaseButton = (Button)findViewById(R.id.lmmIncreaseButton);
+        increaseButton = (Button) findViewById(R.id.lmmIncreaseButton);
         increaseButton.setOnClickListener(this);
-        decreaseButton = (Button)findViewById(R.id.lmmDecreaseButton);
+        decreaseButton = (Button) findViewById(R.id.lmmDecreaseButton);
         decreaseButton.setOnClickListener(this);
-        addBotButton = (Button)findViewById(R.id.lmmAddButton);
+        addBotButton = (Button) findViewById(R.id.lmmAddButton);
         addBotButton.setOnClickListener(this);
-        removeBotButton = (Button)findViewById(R.id.lmmRemoveButton);
+        removeBotButton = (Button) findViewById(R.id.lmmRemoveButton);
         removeBotButton.setOnClickListener(this);
-        addHumanButton = (Button)findViewById(R.id.lmmAddHumanButton);
+        addHumanButton = (Button) findViewById(R.id.lmmAddHumanButton);
         addHumanButton.setOnClickListener(this);
-        removeHumanButton = (Button)findViewById(R.id.lmmRemoveHumanButton);
+        removeHumanButton = (Button) findViewById(R.id.lmmRemoveHumanButton);
         removeHumanButton.setOnClickListener(this);
-        difficulty = (TextView)findViewById(R.id.lmmDifficultyBotsText);
-        numBots = (TextView)findViewById(R.id.lmmNumBotsText);
-        numHumans = (TextView)findViewById(R.id.lmmNumHumanText);
+        difficulty = (TextView) findViewById(R.id.lmmDifficultyBotsText);
+        numBots = (TextView) findViewById(R.id.lmmNumBotsText);
+        numHumans = (TextView) findViewById(R.id.lmmNumHumanText);
         numAiInt = 0;
         numHumanInt = 3;
         playerIndex = 0;
 
         database = FirebaseDatabase.getInstance();
-        lobbyRef = database.getReference().child("localMultiPlayerLobby");
-        gameStateRef = database.getReference().child("localMultiPlayerGameState");
+        serverID = this.getIntent().getStringExtra("serverID");
+        lobbyRef = database.getReference().child("multiPlayerLobby" + serverID);
+        gameStateRef = database.getReference().child("multiPlayerGameState" + serverID);
 
         numPlayersRef = lobbyRef.child("totalNumberOfPlayers");
-        numPlayersRef.setValue(numHumanInt+1);
+        numPlayersRef.setValue(numHumanInt + 1);
         diffAIRef = lobbyRef.child("intelligence");
         diffAIRef.setValue("dumb");
         numHumanRef = lobbyRef.child("numHumans");
@@ -82,9 +84,10 @@ public class lmmActivity extends Activity implements  View.OnClickListener{
     }
 
     @Override
-    public void onClick(View v){
-        switch (v.getId()){
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.lmmReturnButton:
+                lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 finish();
@@ -93,6 +96,7 @@ public class lmmActivity extends Activity implements  View.OnClickListener{
                 numHumanRef.setValue(0);
                 Intent lmgsIntent = new Intent(this, lmwActivity.class);
                 lmgsIntent.putExtra("playerIndex", 0);
+                lmgsIntent.putExtra("serverID", serverID);
                 startActivity(lmgsIntent);
                 finish();
                 break;
@@ -105,35 +109,35 @@ public class lmmActivity extends Activity implements  View.OnClickListener{
                 difficulty.setText("dumb");
                 break;
             case R.id.lmmAddButton:
-                if(numAiInt+numHumanInt < 5){
+                if (numAiInt + numHumanInt < 5) {
                     numAiInt++;
                     numBots.setText(Integer.toString(numAiInt));
                     numAiRef.setValue(numAiInt);
-                    numPlayersRef.setValue(numAiInt+numHumanInt+1);
+                    numPlayersRef.setValue(numAiInt + numHumanInt + 1);
                 }
                 break;
             case R.id.lmmRemoveButton:
-                if(numAiInt+numHumanInt > 1 && numAiInt > 0){
+                if (numAiInt + numHumanInt > 1 && numAiInt > 0) {
                     numAiInt--;
                     numBots.setText(Integer.toString(numAiInt));
                     numAiRef.setValue(numAiInt);
-                    numPlayersRef.setValue(numAiInt+numHumanInt+1);
+                    numPlayersRef.setValue(numAiInt + numHumanInt + 1);
                 }
                 break;
             case R.id.lmmAddHumanButton:
-                if(numAiInt+numHumanInt < 5){
+                if (numAiInt + numHumanInt < 5) {
                     numHumanInt++;
                     numHumans.setText(Integer.toString(numHumanInt));
                     numHumanRef.setValue(numHumanInt);
-                    numPlayersRef.setValue(numAiInt+numHumanInt+1);
+                    numPlayersRef.setValue(numAiInt + numHumanInt + 1);
                 }
                 break;
             case R.id.lmmRemoveHumanButton:
-                if(numAiInt+numHumanInt > 1 && numHumanInt > 0){
+                if (numAiInt + numHumanInt > 1 && numHumanInt > 0) {
                     numHumanInt--;
                     numHumans.setText(Integer.toString(numHumanInt));
                     numHumanRef.setValue(numHumanInt);
-                    numPlayersRef.setValue(numAiInt+numHumanInt+1);
+                    numPlayersRef.setValue(numAiInt + numHumanInt + 1);
                 }
                 break;
             default:

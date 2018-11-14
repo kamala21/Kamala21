@@ -1,7 +1,9 @@
 package com.example.pele_.kamala21;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
@@ -10,11 +12,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -64,6 +68,8 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
     int count;
     int playerIndex;
     String intelligence;
+
+    Button rageQuitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,23 +144,27 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
             }
         });
         gameStateRef.addValueEventListener(this);
+
+        rageQuitButton = (Button) findViewById(R.id.rageQuitButton);
+        rageQuitButton.setOnClickListener(this);
     }
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         instance = dataSnapshot.getValue(RmPmGameState.class);
-        updateScreen();
-        if(instance.playersWithCards() < 2){
-            instance.reDeal();
-            instance.getCurrentSet().clear();
-            RmPmGameState updatedInstance = new RmPmGameState(instance);
-            gameStateRef.setValue(updatedInstance);
-            recreate();
+        if (instance != null) {
+            updateScreen();
+            if (instance.playersWithCards() < 2) {
+                instance.reDeal();
+                instance.getCurrentSet().clear();
+                gameStateRef.setValue(instance);
+                recreate();
+            }
+            if (instance.getCurrentPlayer() != playerIndex) {
+                instance.dumbAi(instance.getCurrentPlayer());
+                gameStateRef.setValue(instance);
+            } //skips over ai
         }
-        if(instance.getCurrentPlayer() != playerIndex){
-            instance.dumbAi(instance.getCurrentPlayer());
-            gameStateRef.setValue(instance);
-        } //skips over ai
     }
 
     @Override
@@ -169,16 +179,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card0.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 0)) {
                         card0.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 0)) {
                         card0.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -188,16 +196,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card1.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 1)) {
                         card1.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 1)) {
                         card1.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -207,16 +213,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card2.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 2)) {
                         card2.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 2)) {
                         card2.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -226,16 +230,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card3.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 3)) {
                         card3.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 3)) {
                         card3.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -245,16 +247,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card0.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 4)) {
                         card4.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 4)) {
                         card4.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -264,16 +264,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card5.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 5)) {
                         card5.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 5)) {
                         card5.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -283,16 +281,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card6.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 6)) {
                         card6.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 6)) {
                         card6.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -302,16 +298,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card7.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 7)) {
                         card7.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 7)) {
                         card7.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -321,16 +315,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card8.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 8)) {
                         card8.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 8)) {
                         card8.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -340,16 +332,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card9.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 9)) {
                         card9.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 9)) {
                         card9.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -359,16 +349,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card10.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 10)) {
                         card10.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 10)) {
                         card10.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -378,16 +366,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card11.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 11)) {
                         card11.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 11)) {
                         card11.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -397,16 +383,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 if (card12.getColorFilter() == null) {
                     if (instance.selectCard(playerIndex, 12)) {
                         card12.setColorFilter(R.color.highlight);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     if (instance.deselectCard(playerIndex, 12)) {
                         card12.setColorFilter(null);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
                                 Toast.LENGTH_SHORT).show();
                     }
@@ -417,7 +401,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                     RmPmGameState updatedInstance = new RmPmGameState(instance);
                     gameStateRef.setValue(updatedInstance);
                 } //if the player plays a valid move it sends the updated game state to the online database
-                else{
+                else {
                     Toast.makeText(getApplication().getApplicationContext(), "Invalid Play / Not Your Turn",
                             Toast.LENGTH_SHORT).show();
                 }
@@ -428,6 +412,12 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                     gameStateRef.setValue(updatedInstance);
                 } //if the player does a valid pass it sends the updated game state to the online database
                 break;
+            case R.id.rageQuitButton:
+                lobbyRef.setValue(null);
+                gameStateRef.setValue(null);
+                Intent mmIntent = new Intent(this, mmActivity.class);
+                startActivity(mmIntent);
+                finish();
             default:
                 break;
         }
@@ -623,13 +613,13 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
             }
         }
         numCards1.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-        if (i > 2){
+        if (i > 2) {
             numCards2.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-            if (i > 3){
+            if (i > 3) {
                 numCards3.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                if (i > 4){
+                if (i > 4) {
                     numCards4.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                    if (i > 5){
+                    if (i > 5) {
                         numCards5.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
                     }
                 }

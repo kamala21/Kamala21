@@ -262,16 +262,16 @@ public class RmPmGameState {
             return false;
         }
         ArrayList<RmPmCard> hand = this.getPlayers().get(playerIndex).getHand();
-        int totalPlayers = this.getPlayers().size();
         if(playerSet.size() != currentSet.size() && currentSet.size() != 0){
             return false;
         }
+        Boolean skipTurn = false;
         playerLoop:
         for(int i = 0; i < playerSet.size(); i++){
             for(int j = 0; j < currentSet.size(); j++){
                 if(playerSet.get(i).getValue() == currentSet.get(i).getValue() && currentSet.get(i).getFace() != "four" &&
                         currentSet.get(i).getFace() != "five" && currentSet.get(i).getFace() != "six"){
-                    nextPlayer();
+                    skipTurn = true;
                     break playerLoop; //so only skips one player
                 }
             }
@@ -283,6 +283,17 @@ public class RmPmGameState {
                 } //copies the player set into the current set
                 playerSet.clear();
                 currentSet.clear();
+                if(hand.size() == 0){
+                    if(playerIndex == 0){
+                        lastPlayed = players.size()-1;
+                    }
+                    else{
+                        lastPlayed--;
+                    }
+                    nextPlayer();
+                } else{
+                    lastPlayed = currentPlayer;
+                }
                 return true;
             }
         } //if the player set is a bomb clears the set and lets them play another card
@@ -292,19 +303,44 @@ public class RmPmGameState {
                 numWilds++;
             }
         }
+        if(numWilds == playerSet.size()){
+            for(int j = 0; j < playerSet.size(); j++){
+                hand.remove(playerSet.get(j));
+            } //copies the player set into the current set
+            playerSet.clear();
+            currentSet.clear();
+            if(hand.size() == 0){
+                if(playerIndex == 0){
+                    lastPlayed = players.size()-1;
+                }
+                else{
+                    lastPlayed--;
+                }
+                nextPlayer();
+            } else{
+                lastPlayed = currentPlayer;
+            }
+            return true;
+        } //if the player set is all wilds clears the set
         currentSet.clear();
         for(int i = 0; i < playerSet.size(); i++){
             currentSet.add(playerSet.get(i));
             hand.remove(playerSet.get(i));
         } //copies the player set into the current set
-        this.setCurrentSet(currentSet); //updates the current set
         this.getPlayers().get(playerIndex).setHand(hand); //updates the player's hand
-        lastPlayed = currentPlayer; //says that the player has played a card
-        if(numWilds == playerSet.size()){
-            playerSet.clear();
-            currentSet.clear();
-            return true;
-        } //if the player set is all wilds clears the set
+        if(hand.size() > 0){
+            lastPlayed = currentPlayer; //says that the player has played a card
+        } else{
+            if(playerIndex == 0){
+                lastPlayed = players.size()-1;
+            }
+            else{
+                lastPlayed--;
+            }
+        }
+        if(skipTurn){
+            nextPlayer();
+        }
         nextPlayer();
         while(this.getPlayers().get(currentPlayer).getHand().size() == 0) {
             nextPlayer();
@@ -354,8 +390,11 @@ public class RmPmGameState {
 
     public void dumbAi(int playerIndex){
         if(this.selectCard(playerIndex, 0)){
-            this.playSet(playerIndex);
-            this.getPlayerSet().clear();
+            if(this.playSet(playerIndex)){
+                this.playerSet.clear();
+            } else{
+                this.passTurn(playerIndex);
+            }
         } else{
             this.passTurn(playerIndex);
         }

@@ -19,6 +19,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
     int numAiInt;
     int numHumanInt;
     int playerIndex;
+    String serverID;
 
     FirebaseDatabase database;
     DatabaseReference lobbyRef;
@@ -37,9 +38,10 @@ public class lmwActivity extends Activity implements ValueEventListener {
         numHumanInt = 3;
         playerIndex = 0;
         playerIndex = getIntent().getIntExtra("playerIndex", -1);
+        serverID = getIntent().getStringExtra("serverID");
         database = FirebaseDatabase.getInstance();
-        lobbyRef = database.getReference().child("localMultiPlayerLobby");
-        gameStateRef = database.getReference().child("localMultiPlayerGameState");
+        lobbyRef = database.getReference().child("multiPlayerLobby" +serverID);
+        gameStateRef = database.getReference().child("multiPlayerGameState" +serverID);
         numPlayersRef = lobbyRef.child("totalNumberOfPlayers");
         numHumanRef = lobbyRef.child("numHumans");
         numAiRef = lobbyRef.child("numAi");
@@ -61,6 +63,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
                 Intent lmgsStartIntent = new Intent(this, lmgsActivity.class);
                 lmgsStartIntent.putExtra("playerIndex", 0);
                 lmgsStartIntent.putExtra("numHumans", numHumanInt);
+                lmgsStartIntent.putExtra("serverID", serverID);
                 startActivity(lmgsStartIntent);
                 finish();
             }
@@ -69,6 +72,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
                     + 1 == dataSnapshot.child("totalNumberOfPlayers").getValue(Integer.class)) {
                 Intent lmgsJoinIntent = new Intent(this, lmgsActivity.class);
                 lmgsJoinIntent.putExtra("playerIndex", playerIndex);
+                lmgsJoinIntent.putExtra("serverID", serverID);
                 startActivity(lmgsJoinIntent);
                 finish();
             }
