@@ -55,7 +55,11 @@ public class RmPmGameState {
      */
     public RmPmGameState(int numPlayers) {
         // initialize the state to be a brand new game
-
+        if(numPlayers < 2){
+            numPlayers = 2;
+        } else if(numPlayers > 6){
+            numPlayers = 6;
+        }
         RmPmDeck deck = new RmPmDeck(numPlayers);
         Collections.shuffle(deck.getDeck());
         //make an empty list of cards for starting playedCards
@@ -284,6 +288,10 @@ public class RmPmGameState {
                 playerSet.clear();
                 currentSet.clear();
                 if (hand.size() == 0) {
+                    players.get(playerIndex).setStanding(this.playersWithCards() - 1);
+                    if (this.playersWithCards() == players.size() - 1) {
+                        players.get(playerIndex).addWin();
+                    }
                     if (playerIndex > 0) {
                         lastPlayed--;
                     } else {
@@ -319,6 +327,10 @@ public class RmPmGameState {
             playerSet.clear();
             currentSet.clear();
             if (hand.size() == 0) {
+                players.get(playerIndex).setStanding(this.playersWithCards() - 1);
+                if (this.playersWithCards() == players.size() - 1) {
+                    players.get(playerIndex).addWin();
+                }
                 if (playerIndex > 0) {
                     lastPlayed--;
                 } else {
@@ -347,6 +359,10 @@ public class RmPmGameState {
         } //copies the player set into the current set
         this.getPlayers().get(playerIndex).setHand(hand); //updates the player's hand
         if (hand.size() == 0) {
+            players.get(playerIndex).setStanding(this.playersWithCards() - 1);
+            if (this.playersWithCards() == players.size() - 1) {
+                players.get(playerIndex).addWin();
+            }
             if (playerIndex > 0) {
                 lastPlayed--;
             } else {
@@ -398,7 +414,6 @@ public class RmPmGameState {
     public void reDeal() {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).getHand().clear();
-            players.get(i).setStanding(-1);
         }
         RmPmDeck deck = new RmPmDeck(players.size());
         int j = 0;
@@ -411,6 +426,32 @@ public class RmPmGameState {
                 j = 0;
             }
         }
+        int poorMan = 0;
+        int richMan = 0;
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getStanding() == -1) {
+                poorMan = i;
+            } else if (players.get(i).getStanding() == players.size() - 2) {
+                richMan = i;
+            }
+            players.get(i).setStanding(-1);
+        }
+        Collections.sort(this.getPlayers().get(poorMan).getHand(), new Comparator<RmPmCard>() {
+            @Override
+            public int compare(RmPmCard o1, RmPmCard o2) {
+                return o1.getValue() - o2.getValue();
+            }
+        });
+        players.get(richMan).addCard(players.get(poorMan).getHand().remove(12));
+        players.get(richMan).addCard(players.get(poorMan).getHand().remove(11));
+        Collections.sort(this.getPlayers().get(richMan).getHand(), new Comparator<RmPmCard>() {
+            @Override
+            public int compare(RmPmCard o1, RmPmCard o2) {
+                return o1.getValue() - o2.getValue();
+            }
+        });
+        players.get(poorMan).addCard(players.get(richMan).getHand().remove(1));
+        players.get(poorMan).addCard(players.get(richMan).getHand().remove(0));
     }
 
     public void dumbAi(int playerIndex) {

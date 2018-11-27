@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -71,6 +74,24 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
     int numHumans;
     String intelligence;
     String serverID;
+
+    View leaderBoard;
+    View player3;
+    View player4;
+    View player5;
+    View player6;
+    TextView wins1;
+    TextView wins2;
+    TextView wins3;
+    TextView wins4;
+    TextView wins5;
+    TextView wins6;
+    TextView standing1;
+    TextView standing2;
+    TextView standing3;
+    TextView standing4;
+    TextView standing5;
+    TextView standing6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,17 +177,20 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                     updateScreen();
                     if (playerIndex == 0) {
                         if (instance.playersWithCards() < 2) {
+                            Toast.makeText(getApplication().getApplicationContext(), "Round done, starting next round",
+                                    Toast.LENGTH_SHORT).show();
+                            updateLeaderboard();
                             instance.reDeal();
                             instance.getCurrentSet().clear();
-                            RmPmGameState updatedInstance = new RmPmGameState(instance);
-                            gameStateRef.setValue(updatedInstance);
-                            recreate();
+                            gameStateRef.setValue(instance);
                         } else if (instance.getCurrentPlayer() > numHumans) {
                             instance.dumbAi(instance.getCurrentPlayer());
                             RmPmGameState updatedInstance = new RmPmGameState(instance);
                             gameStateRef.setValue(updatedInstance);
                         }
                     }
+                } else {
+                    Toast.makeText(getApplication().getApplicationContext(), "Host has Left the Game", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -175,6 +199,61 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
             }
         });
+        leaderBoard = (View) findViewById(R.id.leaderBoardLayout);
+        player3 = (View) findViewById(R.id.infoP3);
+        player4 = (View) findViewById(R.id.infoP4);
+        player5 = (View) findViewById(R.id.infoP5);
+        player6 = (View) findViewById(R.id.infoP6);
+        wins1 = (TextView) findViewById(R.id.wins1);
+        wins2 = (TextView) findViewById(R.id.wins2);
+        wins3 = (TextView) findViewById(R.id.wins3);
+        wins4 = (TextView) findViewById(R.id.wins4);
+        wins5 = (TextView) findViewById(R.id.wins5);
+        wins6 = (TextView) findViewById(R.id.wins6);
+        standing1 = (TextView) findViewById(R.id.standing1);
+        standing2 = (TextView) findViewById(R.id.standing2);
+        standing3 = (TextView) findViewById(R.id.standing3);
+        standing4 = (TextView) findViewById(R.id.standing4);
+        standing5 = (TextView) findViewById(R.id.standing5);
+        standing6 = (TextView) findViewById(R.id.standing6);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.dropdown_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.leaderboard:
+                if (leaderBoard.getVisibility() == View.GONE) {
+                    leaderBoard.setVisibility(View.VISIBLE);
+                } else {
+                    leaderBoard.setVisibility(View.GONE);
+                }
+                return true;
+            case R.id.leaveGame:
+                if (playerIndex == 0) {
+                    gameStateRef.setValue(null);
+                    lobbyRef.setValue(null);
+                }
+                Intent mmIntent = new Intent(this, mmActivity.class);
+                startActivity(mmIntent);
+                finish();
+                return true;
+            case R.id.exitApp:
+                if (playerIndex == 0) {
+                    gameStateRef.setValue(null);
+                    lobbyRef.setValue(null);
+                }
+                System.exit(0);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -647,15 +726,87 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                 }
             }
         }
-        numCards1.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-        if (i > 2) {
-            numCards2.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-            if (i > 3) {
-                numCards3.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                if (i > 4) {
-                    numCards4.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                    if (i > 5) {
-                        numCards5.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+        if (playerIndex == 0) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+                        }
+                    }
+                }
+            }
+        } else if (playerIndex == 1) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
+                        }
+                    }
+                }
+            }
+        } else if (playerIndex == 2) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
+                        }
+                    }
+                }
+            }
+        } else if (playerIndex == 3) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
+                        }
+                    }
+                }
+            }
+        } else if (playerIndex == 4) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
+                        }
+                    }
+                }
+            }
+        } else if (playerIndex == 5) {
+            numCards1.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
+            if (i > 2) {
+                numCards2.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
+                if (i > 3) {
+                    numCards3.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
+                    if (i > 4) {
+                        numCards4.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
+                        if (i > 5) {
+                            numCards5.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
+                        }
                     }
                 }
             }
@@ -665,6 +816,73 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
     public void updateTurn() {
         String output = "Current Player: P" + Integer.toString(instance.getCurrentPlayer() + 1);
         currentPlayerText.setText(output);
+    }
+
+    public void updateLeaderboard() {
+        int i = instance.getPlayers().size();
+        if (i < 6) {
+            player6.setVisibility(View.GONE);
+            if (i < 5) {
+                player5.setVisibility(View.GONE);
+                if (i < 4) {
+                    player4.setVisibility(View.GONE);
+                    if (i < 3) {
+                        player3.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
+        wins1.setText(Integer.toString(instance.getPlayers().get(0).getWins()));
+        wins2.setText(Integer.toString(instance.getPlayers().get(1).getWins()));
+        standing1.setText("Middle Class");
+        standing2.setText("Middle Class");
+        if (i > 2) {
+            wins3.setText(Integer.toString(instance.getPlayers().get(2).getWins()));
+            standing3.setText("Middle Class");
+            if (i > 3) {
+                wins4.setText(Integer.toString(instance.getPlayers().get(3).getWins()));
+                standing4.setText("Middle Class");
+                if (i > 4) {
+                    wins5.setText(Integer.toString(instance.getPlayers().get(4).getWins()));
+                    standing5.setText("Middle Class");
+                    if (i > 5) {
+                        wins6.setText(Integer.toString(instance.getPlayers().get(5).getWins()));
+                        standing6.setText("Middle Class");
+                    }
+                }
+            }
+        }
+        for (int j = 0; j < i; j++) {
+            if (instance.getPlayers().get(j).getStanding() == i-2) {
+                if (j == 0) {
+                    standing1.setText("Rich Man");
+                } else if (j == 1) {
+                    standing2.setText("Rich Man");
+                } else if (j == 2) {
+                    standing3.setText("Rich Man");
+                } else if (j == 3) {
+                    standing4.setText("Rich Man");
+                } else if (j == 4) {
+                    standing5.setText("Rich Man");
+                } else if (j == 5) {
+                    standing6.setText("Rich Man");
+                }
+            } else if (instance.getPlayers().get(j).getStanding() == -1) {
+                if (j == 0) {
+                    standing1.setText("Poor Man");
+                } else if (j == 1) {
+                    standing2.setText("Poor Man");
+                } else if (j == 2) {
+                    standing3.setText("Poor Man");
+                } else if (j == 3) {
+                    standing4.setText("Poor Man");
+                } else if (j == 4) {
+                    standing5.setText("Poor Man");
+                } else if (j == 5) {
+                    standing6.setText("Poor Man");
+                }
+            }
+        }
     }
 
     public void updateScreen() {

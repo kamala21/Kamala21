@@ -4,65 +4,90 @@
 
     <application
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".mmActivity" android:screenOrientation="landscape" android:windowSoftInputMode="stateHidden">
+        <activity
+            android:name=".mmActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".htpActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".htpActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".spgsActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".spgsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".osActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".osActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lmgsActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".lmgsActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".spmActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".spmActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lmmActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".lmmActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".lmwActivity" android:screenOrientation="landscape">
+        <activity
+            android:name=".lmwActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme">
             <intent-filter>
-                <action android:name="android.intent.action.PICK_ACTIVITY"/>
+                <action android:name="android.intent.action.PICK_ACTIVITY" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
