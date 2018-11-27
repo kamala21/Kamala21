@@ -452,6 +452,8 @@ public class RmPmGameState {
         });
         players.get(poorMan).addCard(players.get(richMan).getHand().remove(1));
         players.get(poorMan).addCard(players.get(richMan).getHand().remove(0));
+        currentPlayer = poorMan;
+        lastPlayed = -1;
     }
 
     public void dumbAi(int playerIndex) {
