@@ -114,10 +114,14 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.mmLocalButton:
-                Intent lmmIntent = new Intent(this, lmmActivity.class);
-                lmmIntent.putExtra("serverID", startServerID.getText().toString());
-                startActivity(lmmIntent);
-                finish();
+                if(!serverExists) {
+                    Intent lmmIntent = new Intent(this, lmmActivity.class);
+                    lmmIntent.putExtra("serverID", startServerID.getText().toString());
+                    startActivity(lmmIntent);
+                    finish();
+                } else{
+                    Toast.makeText(this.getApplicationContext(), "Server already exists", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.mmJoinButton:
                 if (serverExists) {

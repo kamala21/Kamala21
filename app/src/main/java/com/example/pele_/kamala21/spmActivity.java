@@ -69,6 +69,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
                 RmPmGameState instance = new RmPmGameState(numInt+1);
                 gameStateRef.setValue(instance);
                 Intent spgsIntent = new Intent(this, spgsActivity.class);
+                spgsIntent.putExtra("serverID", Integer.toString(1));
                 startActivity(spgsIntent);
                 finish();
                 break;

@@ -383,6 +383,7 @@
             android:layout_marginTop="16dp"
             android:scaleType="fitStart"
             android:src="@drawable/seven_spades"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -423,7 +424,7 @@
             android:id="@+id/card12"
             android:layout_width="225dp"
             android:layout_height="700dp"
-            android:layout_marginStart="652dp"
+            android:layout_marginStart="648dp"
             android:layout_marginTop="16dp"
             android:scaleType="fitStart"
             android:src="@drawable/seven_spades"

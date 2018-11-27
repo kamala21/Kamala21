@@ -68,14 +68,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
     int count;
     int playerIndex;
     String intelligence;
-
-    Button rageQuitButton;
+    String serverID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_game_screen);
 
+        serverID = getIntent().getStringExtra("serverID");
         playerIndex = 0;
         count = 0;
         card0 = (ImageButton) findViewById(R.id.card0);
@@ -145,8 +145,6 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         });
         gameStateRef.addValueEventListener(this);
 
-        rageQuitButton = (Button) findViewById(R.id.rageQuitButton);
-        rageQuitButton.setOnClickListener(this);
     }
 
     @Override
@@ -155,12 +153,13 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         if (instance != null) {
             updateScreen();
             if (instance.playersWithCards() < 2) {
+                Toast.makeText(getApplication().getApplicationContext(), "Round done, starting next round",
+                        Toast.LENGTH_SHORT).show();
                 instance.reDeal();
                 instance.getCurrentSet().clear();
                 gameStateRef.setValue(instance);
                 recreate();
-            }
-            if (instance.getCurrentPlayer() != playerIndex) {
+            } else if (instance.getCurrentPlayer() != playerIndex) {
                 instance.dumbAi(instance.getCurrentPlayer());
                 gameStateRef.setValue(instance);
             } //skips over ai
@@ -385,6 +384,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                         card12.setColorFilter(R.color.highlight);
                     } else {
                         Toast.makeText(getApplication().getApplicationContext(), "Invalid Move",
+
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -412,12 +412,6 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                     gameStateRef.setValue(updatedInstance);
                 } //if the player does a valid pass it sends the updated game state to the online database
                 break;
-            case R.id.rageQuitButton:
-                lobbyRef.setValue(null);
-                gameStateRef.setValue(null);
-                Intent mmIntent = new Intent(this, mmActivity.class);
-                startActivity(mmIntent);
-                finish();
             default:
                 break;
         }
@@ -445,31 +439,57 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         });
         int i = instance.getPlayers().get(playerIndex).getHand().size();
         if (i > 0) {
+            card0.setVisibility(View.GONE);
             card0.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(0).getCardName(), "drawable", getPackageName()));
+            card0.setVisibility(View.VISIBLE);
             if (i > 1) {
+                card1.setVisibility(View.GONE);
                 card1.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(1).getCardName(), "drawable", getPackageName()));
+                card1.setVisibility(View.VISIBLE);
                 if (i > 2) {
+                    card2.setVisibility(View.GONE);
                     card2.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(2).getCardName(), "drawable", getPackageName()));
+                    card2.setVisibility(View.VISIBLE);
                     if (i > 3) {
+                        card3.setVisibility(View.GONE);
                         card3.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(3).getCardName(), "drawable", getPackageName()));
+                        card3.setVisibility(View.VISIBLE);
                         if (i > 4) {
+                            card4.setVisibility(View.GONE);
                             card4.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(4).getCardName(), "drawable", getPackageName()));
+                            card4.setVisibility(View.VISIBLE);
                             if (i > 5) {
+                                card5.setVisibility(View.GONE);
                                 card5.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(5).getCardName(), "drawable", getPackageName()));
+                                card5.setVisibility(View.VISIBLE);
                                 if (i > 6) {
+                                    card6.setVisibility(View.GONE);
                                     card6.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(6).getCardName(), "drawable", getPackageName()));
+                                    card6.setVisibility(View.VISIBLE);
                                     if (i > 7) {
+                                        card7.setVisibility(View.GONE);
                                         card7.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(7).getCardName(), "drawable", getPackageName()));
+                                        card7.setVisibility(View.VISIBLE);
                                         if (i > 8) {
+                                            card8.setVisibility(View.GONE);
                                             card8.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(8).getCardName(), "drawable", getPackageName()));
+                                            card8.setVisibility(View.VISIBLE);
                                             if (i > 9) {
+                                                card9.setVisibility(View.GONE);
                                                 card9.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(9).getCardName(), "drawable", getPackageName()));
+                                                card9.setVisibility(View.VISIBLE);
                                                 if (i > 10) {
+                                                    card10.setVisibility(View.GONE);
                                                     card10.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(10).getCardName(), "drawable", getPackageName()));
+                                                    card10.setVisibility(View.VISIBLE);
                                                     if (i > 11) {
+                                                        card11.setVisibility(View.GONE);
                                                         card11.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(11).getCardName(), "drawable", getPackageName()));
+                                                        card11.setVisibility(View.VISIBLE);
                                                         if (i > 12) {
+                                                            card12.setVisibility(View.GONE);
                                                             card12.setImageResource(getResources().getIdentifier(instance.getPlayers().get(playerIndex).getHand().get(12).getCardName(), "drawable", getPackageName()));
+                                                            card12.setVisibility(View.VISIBLE);
                                                         }
                                                     }
                                                 }
@@ -484,31 +504,31 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
             }
         }
         if (i < 13) {
-            card12.setVisibility(View.INVISIBLE);
+            card12.setVisibility(View.GONE);
             if (i < 12) {
-                card11.setVisibility(View.INVISIBLE);
+                card11.setVisibility(View.GONE);
                 if (i < 11) {
-                    card10.setVisibility(View.INVISIBLE);
+                    card10.setVisibility(View.GONE);
                     if (i < 10) {
-                        card9.setVisibility(View.INVISIBLE);
+                        card9.setVisibility(View.GONE);
                         if (i < 9) {
-                            card8.setVisibility(View.INVISIBLE);
+                            card8.setVisibility(View.GONE);
                             if (i < 8) {
-                                card7.setVisibility(View.INVISIBLE);
+                                card7.setVisibility(View.GONE);
                                 if (i < 7) {
-                                    card6.setVisibility(View.INVISIBLE);
+                                    card6.setVisibility(View.GONE);
                                     if (i < 6) {
-                                        card5.setVisibility(View.INVISIBLE);
+                                        card5.setVisibility(View.GONE);
                                         if (i < 5) {
-                                            card4.setVisibility(View.INVISIBLE);
+                                            card4.setVisibility(View.GONE);
                                             if (i < 4) {
-                                                card3.setVisibility(View.INVISIBLE);
+                                                card3.setVisibility(View.GONE);
                                                 if (i < 3) {
-                                                    card2.setVisibility(View.INVISIBLE);
+                                                    card2.setVisibility(View.GONE);
                                                     if (i < 2) {
-                                                        card1.setVisibility(View.INVISIBLE);
+                                                        card1.setVisibility(View.GONE);
                                                         if (i < 1) {
-                                                            card0.setVisibility(View.INVISIBLE);
+                                                            card0.setVisibility(View.GONE);
                                                         }
                                                     }
                                                 }
@@ -527,35 +547,45 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
     public void updateCurrentSet() {
         int i = instance.getCurrentSet().size();
         if (i > 0) {
-            currentSet0.setVisibility(View.VISIBLE);
+            currentSet0.setVisibility(View.GONE);
             currentSet0.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(0).getCardName(), "drawable", getPackageName()));
+            currentSet0.setVisibility(View.VISIBLE);
             if (i > 1) {
-                currentSet1.setVisibility(View.VISIBLE);
+                currentSet1.setVisibility(View.GONE);
                 currentSet1.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(1).getCardName(), "drawable", getPackageName()));
+                currentSet1.setVisibility(View.VISIBLE);
                 if (i > 2) {
-                    currentSet2.setVisibility(View.VISIBLE);
+                    currentSet2.setVisibility(View.GONE);
                     currentSet2.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(2).getCardName(), "drawable", getPackageName()));
+                    currentSet2.setVisibility(View.VISIBLE);
                     if (i > 3) {
-                        currentSet3.setVisibility(View.VISIBLE);
+                        currentSet3.setVisibility(View.GONE);
                         currentSet3.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(3).getCardName(), "drawable", getPackageName()));
+                        currentSet3.setVisibility(View.VISIBLE);
                         if (i > 4) {
-                            currentSet4.setVisibility(View.VISIBLE);
+                            currentSet4.setVisibility(View.GONE);
                             currentSet4.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(4).getCardName(), "drawable", getPackageName()));
+                            currentSet4.setVisibility(View.VISIBLE);
                             if (i > 5) {
-                                currentSet5.setVisibility(View.VISIBLE);
+                                currentSet5.setVisibility(View.GONE);
                                 currentSet5.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(5).getCardName(), "drawable", getPackageName()));
-                                if (i > 6) {
-                                    currentSet6.setVisibility(View.VISIBLE);
+                                currentSet5.setVisibility(View.VISIBLE);
+                               if (i > 6) {
+                                    currentSet6.setVisibility(View.GONE);
                                     currentSet6.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(6).getCardName(), "drawable", getPackageName()));
+                                    currentSet6.setVisibility(View.VISIBLE);
                                     if (i > 7) {
-                                        currentSet7.setVisibility(View.VISIBLE);
+                                        currentSet7.setVisibility(View.GONE);
                                         currentSet7.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(7).getCardName(), "drawable", getPackageName()));
+                                        currentSet7.setVisibility(View.VISIBLE);
                                         if (i > 8) {
-                                            currentSet8.setVisibility(View.VISIBLE);
+                                            currentSet8.setVisibility(View.GONE);
                                             currentSet8.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(8).getCardName(), "drawable", getPackageName()));
+                                            currentSet8.setVisibility(View.VISIBLE);
                                             if (i > 9) {
-                                                currentSet9.setVisibility(View.VISIBLE);
+                                                currentSet9.setVisibility(View.GONE);
                                                 currentSet9.setImageResource(getResources().getIdentifier(instance.getCurrentSet().get(9).getCardName(), "drawable", getPackageName()));
+                                                currentSet9.setVisibility(View.VISIBLE);
                                             }
                                         }
                                     }
@@ -567,25 +597,25 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
             }
         }
         if (i < 10) {
-            currentSet9.setVisibility(View.INVISIBLE);
+            currentSet9.setVisibility(View.GONE);
             if (i < 9) {
-                currentSet8.setVisibility(View.INVISIBLE);
+                currentSet8.setVisibility(View.GONE);
                 if (i < 8) {
-                    currentSet7.setVisibility(View.INVISIBLE);
+                    currentSet7.setVisibility(View.GONE);
                     if (i < 7) {
-                        currentSet6.setVisibility(View.INVISIBLE);
+                        currentSet6.setVisibility(View.GONE);
                         if (i < 6) {
-                            currentSet5.setVisibility(View.INVISIBLE);
+                            currentSet5.setVisibility(View.GONE);
                             if (i < 5) {
-                                currentSet4.setVisibility(View.INVISIBLE);
+                                currentSet4.setVisibility(View.GONE);
                                 if (i < 4) {
-                                    currentSet3.setVisibility(View.INVISIBLE);
+                                    currentSet3.setVisibility(View.GONE);
                                     if (i < 3) {
-                                        currentSet2.setVisibility(View.INVISIBLE);
+                                        currentSet2.setVisibility(View.GONE);
                                         if (i < 2) {
-                                            currentSet1.setVisibility(View.INVISIBLE);
+                                            currentSet1.setVisibility(View.GONE);
                                             if (i < 1) {
-                                                currentSet0.setVisibility(View.INVISIBLE);
+                                                currentSet0.setVisibility(View.GONE);
                                             }
                                         }
                                     }

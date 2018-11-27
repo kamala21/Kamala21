@@ -250,7 +250,7 @@ public class RmPmGameState {
         while (players.get(currentPlayer).getHand().size() < 1) {
             nextPlayer();
         } //skips players that don't have cards
-        if(currentPlayer == lastPlayed){
+        if (currentPlayer == lastPlayed) {
             ArrayList<RmPmCard> emptySet = new ArrayList<RmPmCard>();
             this.setCurrentSet(emptySet);
         } //sets the current set to empty if the last person to play cards is the current player
@@ -262,90 +262,115 @@ public class RmPmGameState {
             return false;
         }
         ArrayList<RmPmCard> hand = this.getPlayers().get(playerIndex).getHand();
-        if(playerSet.size() != currentSet.size() && currentSet.size() != 0){
+        if (playerSet.size() != currentSet.size() && currentSet.size() != 0) {
             return false;
         }
         Boolean skipTurn = false;
         playerLoop:
-        for(int i = 0; i < playerSet.size(); i++){
-            for(int j = 0; j < currentSet.size(); j++){
-                if(playerSet.get(i).getValue() == currentSet.get(i).getValue() && currentSet.get(i).getFace() != "four" &&
-                        currentSet.get(i).getFace() != "five" && currentSet.get(i).getFace() != "six"){
+        for (int i = 0; i < playerSet.size(); i++) {
+            for (int j = 0; j < currentSet.size(); j++) {
+                if (playerSet.get(i).getValue() == currentSet.get(i).getValue() && currentSet.get(i).getFace() != "four" &&
+                        currentSet.get(i).getFace() != "five" && currentSet.get(i).getFace() != "six") {
                     skipTurn = true;
                     break playerLoop; //so only skips one player
                 }
             }
         } //if the current and player set has the same value does an extra next player
-        for(int i = 0; i < playerSet.size(); i++){
-            if(playerSet.get(i).getFace() == "three"){
-                for(int j = 0; j < playerSet.size(); j++){
+        for (int i = 0; i < playerSet.size(); i++) {
+            if (playerSet.get(i).getFace() == "three") {
+                for (int j = 0; j < playerSet.size(); j++) {
                     hand.remove(playerSet.get(j));
                 } //copies the player set into the current set
                 playerSet.clear();
                 currentSet.clear();
-                if(hand.size() == 0){
-                    if(playerIndex == 0){
-                        lastPlayed = players.size()-1;
-                    }
-                    else{
+                if (hand.size() == 0) {
+                    if (playerIndex > 0) {
                         lastPlayed--;
+                    } else {
+                        lastPlayed = players.size() - 1;
+                    }
+                    while (players.get(lastPlayed).getHand().size() < 1) {
+                        if (lastPlayed > 0) {
+                            lastPlayed--;
+                        } else {
+                            lastPlayed = players.size() - 1;
+                        }
                     }
                     nextPlayer();
-                } else{
+                } else {
                     lastPlayed = currentPlayer;
                 }
+                while (this.getPlayers().get(currentPlayer).getHand().size() == 0) {
+                    nextPlayer();
+                } //continues around until a person who has cards is now the current player
                 return true;
             }
         } //if the player set is a bomb clears the set and lets them play another card
         int numWilds = 0;
-        for(int i = 0; i < playerSet.size(); i++){
-            if(playerSet.get(i).getFace() == "four" || playerSet.get(i).getFace() == "five" || playerSet.get(i).getFace() == "six"){
+        for (int i = 0; i < playerSet.size(); i++) {
+            if (playerSet.get(i).getFace() == "four" || playerSet.get(i).getFace() == "five" || playerSet.get(i).getFace() == "six") {
                 numWilds++;
             }
         }
-        if(numWilds == playerSet.size()){
-            for(int j = 0; j < playerSet.size(); j++){
+        if (numWilds == playerSet.size()) {
+            for (int j = 0; j < playerSet.size(); j++) {
                 hand.remove(playerSet.get(j));
             } //copies the player set into the current set
             playerSet.clear();
             currentSet.clear();
-            if(hand.size() == 0){
-                if(playerIndex == 0){
-                    lastPlayed = players.size()-1;
-                }
-                else{
+            if (hand.size() == 0) {
+                if (playerIndex > 0) {
                     lastPlayed--;
+                } else {
+                    lastPlayed = players.size() - 1;
+                }
+                while (players.get(lastPlayed).getHand().size() < 1) {
+                    if (lastPlayed > 0) {
+                        lastPlayed--;
+                    } else {
+                        lastPlayed = players.size() - 1;
+                    }
                 }
                 nextPlayer();
-            } else{
+            } else {
                 lastPlayed = currentPlayer;
             }
+            while (this.getPlayers().get(currentPlayer).getHand().size() == 0) {
+                nextPlayer();
+            } //continues around until a person who has cards is now the current player
             return true;
         } //if the player set is all wilds clears the set
         currentSet.clear();
-        for(int i = 0; i < playerSet.size(); i++){
+        for (int i = 0; i < playerSet.size(); i++) {
             currentSet.add(playerSet.get(i));
             hand.remove(playerSet.get(i));
         } //copies the player set into the current set
         this.getPlayers().get(playerIndex).setHand(hand); //updates the player's hand
-        if(hand.size() > 0){
-            lastPlayed = currentPlayer; //says that the player has played a card
-        } else{
-            if(playerIndex == 0){
-                lastPlayed = players.size()-1;
-            }
-            else{
+        if (hand.size() == 0) {
+            if (playerIndex > 0) {
                 lastPlayed--;
+            } else {
+                lastPlayed = players.size() - 1;
             }
+            while (players.get(lastPlayed).getHand().size() < 1) {
+                if (lastPlayed > 0) {
+                    lastPlayed--;
+                } else {
+                    lastPlayed = players.size() - 1;
+                }
+            }
+            nextPlayer();
+        } else {
+            lastPlayed = currentPlayer;
         }
-        if(skipTurn){
+        if (skipTurn) {
             nextPlayer();
         }
         nextPlayer();
-        while(this.getPlayers().get(currentPlayer).getHand().size() == 0) {
+        while (this.getPlayers().get(currentPlayer).getHand().size() == 0) {
             nextPlayer();
         } //continues around until a person who has cards is now the current player
-        if(currentPlayer == lastPlayed){
+        if (currentPlayer == lastPlayed) {
             ArrayList<RmPmCard> emptySet = new ArrayList<RmPmCard>();
             this.setCurrentSet(emptySet);
         } //sets the current set to empty if the last person to play cards is the current player
@@ -370,8 +395,8 @@ public class RmPmGameState {
         return count;
     }
 
-    public void reDeal(){
-        for(int i = 0; i < players.size(); i++){
+    public void reDeal() {
+        for (int i = 0; i < players.size(); i++) {
             players.get(i).getHand().clear();
             players.get(i).setStanding(-1);
         }
@@ -388,14 +413,14 @@ public class RmPmGameState {
         }
     }
 
-    public void dumbAi(int playerIndex){
-        if(this.selectCard(playerIndex, 0)){
-            if(this.playSet(playerIndex)){
+    public void dumbAi(int playerIndex) {
+        if (this.selectCard(playerIndex, 0)) {
+            if (this.playSet(playerIndex)) {
                 this.playerSet.clear();
-            } else{
+            } else {
                 this.passTurn(playerIndex);
             }
-        } else{
+        } else {
             this.passTurn(playerIndex);
         }
     }
