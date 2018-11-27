@@ -20,6 +20,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
     TextView difficulty;
     TextView numBots;
     int numInt;
+    int serverID;
 
     FirebaseDatabase database;
     DatabaseReference lobbyRef;
@@ -49,8 +50,9 @@ public class spmActivity extends Activity implements  View.OnClickListener{
         numInt = 3;
 
         database = FirebaseDatabase.getInstance();
-        lobbyRef = database.getReference().child("singlePlayerLobby");
-        gameStateRef = database.getReference().child("singlePlayerGameState");
+        serverID = this.getIntent().getIntExtra("serverID", -1);
+        lobbyRef = database.getReference().child("singlePlayerLobby" + Integer.toString(serverID));
+        gameStateRef = database.getReference().child("singlePlayerGameState" + Integer.toString(serverID));
         numPlayersRef = lobbyRef.child("numberOfPlayers");
         numPlayersRef.setValue(Integer.toString(numInt+1));
         diffAIRef = lobbyRef.child("intelligence");
@@ -61,6 +63,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.spmReturnButton:
+                lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 finish();
@@ -69,7 +72,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
                 RmPmGameState instance = new RmPmGameState(numInt+1);
                 gameStateRef.setValue(instance);
                 Intent spgsIntent = new Intent(this, spgsActivity.class);
-                spgsIntent.putExtra("serverID", Integer.toString(1));
+                spgsIntent.putExtra("serverID", serverID);
                 startActivity(spgsIntent);
                 finish();
                 break;

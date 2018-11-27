@@ -33,6 +33,8 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
     DatabaseReference numPlayersRef;
     int playerIndex;
     boolean serverExists = false;
+    boolean soloServer = false;
+    int soloServerID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +107,8 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.mmSingleButton:
                 Intent spmIntent = new Intent(this, spmActivity.class);
+                soloServerID = (int)(Math.random() * 200);
+                spmIntent.putExtra("serverID", soloServerID);
                 startActivity(spmIntent);
                 finish();
                 break;
@@ -114,12 +118,12 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
                 finish();
                 break;
             case R.id.mmLocalButton:
-                if(!serverExists) {
+                if (!serverExists) {
                     Intent lmmIntent = new Intent(this, lmmActivity.class);
                     lmmIntent.putExtra("serverID", startServerID.getText().toString());
                     startActivity(lmmIntent);
                     finish();
-                } else{
+                } else {
                     Toast.makeText(this.getApplicationContext(), "Server already exists", Toast.LENGTH_SHORT).show();
                 }
                 break;

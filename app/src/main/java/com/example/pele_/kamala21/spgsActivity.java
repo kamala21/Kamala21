@@ -73,7 +73,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
     int count;
     int playerIndex;
     String intelligence;
-    String serverID;
+    int serverID;
 
     View leaderBoard;
     View player3;
@@ -98,7 +98,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_game_screen);
 
-        serverID = getIntent().getStringExtra("serverID");
+        serverID = getIntent().getIntExtra("serverID", -1);
         playerIndex = 0;
         count = 0;
         card0 = (ImageButton) findViewById(R.id.card0);
@@ -153,8 +153,8 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         currentSet8 = (ImageView) findViewById(R.id.currentSet8);
         currentSet9 = (ImageView) findViewById(R.id.currentSet9);
         database = FirebaseDatabase.getInstance();
-        gameStateRef = database.getReference().child("singlePlayerGameState");
-        lobbyRef = database.getReference().child("singlePlayerLobby");
+        gameStateRef = database.getReference().child("singlePlayerGameState" + Integer.toString(serverID));
+        lobbyRef = database.getReference().child("singlePlayerLobby" + Integer.toString(serverID));
         lobbyRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

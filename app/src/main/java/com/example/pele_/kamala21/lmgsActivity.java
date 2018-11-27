@@ -190,7 +190,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                         }
                     }
                 } else {
-                    Toast.makeText(getApplication().getApplicationContext(), "Host has Left the Game", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplication().getApplicationContext(), "Player has Left the Game", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -236,19 +236,15 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                 }
                 return true;
             case R.id.leaveGame:
-                if (playerIndex == 0) {
-                    gameStateRef.setValue(null);
-                    lobbyRef.setValue(null);
-                }
+                gameStateRef.setValue(null);
+                lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 finish();
                 return true;
             case R.id.exitApp:
-                if (playerIndex == 0) {
-                    gameStateRef.setValue(null);
-                    lobbyRef.setValue(null);
-                }
+                gameStateRef.setValue(null);
+                lobbyRef.setValue(null);
                 System.exit(0);
                 return true;
             default:
