@@ -3,10 +3,7 @@ package com.example.pele_.kamala21;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.text.Layout;
-import android.text.StaticLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -233,7 +230,15 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 instance.getCurrentSet().clear();
                 gameStateRef.setValue(instance);
             } else if (instance.getCurrentPlayer() != playerIndex) {
-                instance.dumbAi(instance.getCurrentPlayer());
+                try
+                {
+                    Thread.sleep(750);
+                }
+                catch(InterruptedException ex)
+                {
+                    Thread.currentThread().interrupt();
+                }
+                instance.smartAi(instance.getCurrentPlayer());
                 gameStateRef.setValue(instance);
             } //skips over ai
         }

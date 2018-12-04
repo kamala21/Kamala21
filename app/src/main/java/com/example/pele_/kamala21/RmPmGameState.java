@@ -45,7 +45,7 @@ public class RmPmGameState {
         //make the player set an empty arraylist of cards
         playerSet = new ArrayList<RmPmCard>();
         // make it player 0's move
-        currentPlayer = 0;
+        currentPlayer = playerWith7Spades();
         // make lastPlayed to be something
         lastPlayed = -1;
     }// constructor
@@ -55,9 +55,9 @@ public class RmPmGameState {
      */
     public RmPmGameState(int numPlayers) {
         // initialize the state to be a brand new game
-        if(numPlayers < 2){
+        if (numPlayers < 2) {
             numPlayers = 2;
-        } else if(numPlayers > 6){
+        } else if (numPlayers > 6) {
             numPlayers = 6;
         }
         RmPmDeck deck = new RmPmDeck(numPlayers);
@@ -86,7 +86,7 @@ public class RmPmGameState {
         //make the player set an empty arraylist of cards
         playerSet = new ArrayList<RmPmCard>();
         // make it player 0's move
-        currentPlayer = 0;
+        currentPlayer = playerWith7Spades();
         // make lastPlayed to be something
         lastPlayed = -1;
     }// constructor
@@ -199,7 +199,7 @@ public class RmPmGameState {
                         if (inCard.getValue() >= currentSet.get(i).getValue() || inCard.getFace() == "four" ||
                                 inCard.getFace() == "five" || inCard.getFace() == "six" || currentSet.get(i).getFace() == "four" ||
                                 currentSet.get(i).getFace() == "five" || currentSet.get(i).getFace() == "six") {
-                            //continues if selected card either matches each card in the current set; is less than; or is a wild
+                            //continues if selected card either matches each card in the current set; is greater than; or is a wild
                         } else {
                             return false;
                         }
@@ -211,7 +211,7 @@ public class RmPmGameState {
                         if (inCard.getValue() >= currentSet.get(i).getValue() || inCard.getFace() == "four" ||
                                 inCard.getFace() == "five" || inCard.getFace() == "six" || currentSet.get(i).getFace() == "four" ||
                                 currentSet.get(i).getFace() == "five" || currentSet.get(i).getFace() == "six") {
-                            //continues if selected card either matches each card in the current set; is less than; or is a wild
+                            //continues if selected card either matches each card in the current set; is greater than; or is a wild
                         } else {
                             return false;
                         }
@@ -238,9 +238,12 @@ public class RmPmGameState {
         if (playerIndex != currentPlayer) {
             return false;
         }
-        if (playerSet.contains(this.getPlayers().get(playerIndex).getHand().get(cardIndex))) {
-            playerSet.remove(this.getPlayers().get(playerIndex).getHand().get(cardIndex));
-            return true;
+        RmPmCard selectedCard = this.getPlayers().get(playerIndex).getHand().get(cardIndex);
+        for(int i = 0; i < playerSet.size(); i++){
+            if(playerSet.get(i).equals(selectedCard)){
+                playerSet.remove(playerSet.get(i));
+                return true;
+            }
         } //if the player set contains the card that you are deselecting, then removes card from player set
         return false;
     }
@@ -466,5 +469,78 @@ public class RmPmGameState {
         } else {
             this.passTurn(playerIndex);
         }
+    } //plays a random card, if bot picks invalid card, passes it's turn
+
+    public void smartAi(int playerIndex) {
+        if(bombLay(playerIndex)){
+            playerSet.clear();
+        } else if(smartMove(playerIndex)){
+            playerSet.clear();
+        } else{
+            playerSet.clear();
+            passTurn(playerIndex);
+        } //if bot does not have a bombLay or smartMove he clears playerSet and passes
+    }
+
+    private boolean smartMove(int playerIndex){
+        Collections.sort(this.getPlayers().get(playerIndex).getHand(), new Comparator<RmPmCard>() {
+            @Override
+            public int compare(RmPmCard o1, RmPmCard o2) {
+                return o1.getValue() - o2.getValue();
+            }
+        });
+        int size = currentSet.size();
+        if(size < 1){ //if it is an empty set
+            playerSet.clear();
+            playSameFace(playerIndex, 0); //plays lowest card, doubles if two of lowest and so on
+            return true;
+        } else {
+            for (int i = 0; i < players.get(playerIndex).getHand().size(); i++) {
+                if (selectCard(playerIndex, i)) { //if card is selectable
+                    playerSet.clear();
+                    if (numSameFace(playerIndex, i) == size) {
+                        playSameFace(playerIndex, i);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean bombLay(int playerIndex){
+        return false;
+    }
+
+    private int numSameFace(int playerIndex, int cardIndex){
+        int count = 0;
+        String cardFace = players.get(playerIndex).getHand().get(cardIndex).getFace();
+        for(int i = 0; i < players.get(playerIndex).getHand().size(); i++){
+            if(cardFace.equals(players.get(playerIndex).getHand().get(i).getFace())){
+                count++;
+            }
+        }
+        return count;
+    } //counts the number of cards with the same face to find quads, triples, and pairs
+
+    private void playSameFace(int playerIndex, int cardIndex){
+        String cardFace = players.get(playerIndex).getHand().get(cardIndex).getFace();
+        for(int i = 0; i < players.get(playerIndex).getHand().size(); i++){
+            if(cardFace.equals(players.get(playerIndex).getHand().get(i).getFace())){
+                selectCard(playerIndex, i);
+            }
+        }
+        playSet(playerIndex);
+    }
+
+    private int playerWith7Spades(){
+        for(int i = 0; i < players.size(); i++){
+            for(int j = 0; j < 6; j++){
+                if(players.get(i).getHand().get(j).getSuit().equals("spades") && players.get(i).getHand().get(j).getValue() == 0){
+                    return i;
+                } //if player has the seven of spades sets them to start the game and leaves the loops
+            }
+        }
+        return 0;
     }
 }

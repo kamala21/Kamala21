@@ -3,7 +3,6 @@ package com.example.pele_.kamala21;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -184,6 +183,14 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                             instance.getCurrentSet().clear();
                             gameStateRef.setValue(instance);
                         } else if (instance.getCurrentPlayer() > numHumans) {
+                            try
+                            {
+                                Thread.sleep(750);
+                            }
+                            catch(InterruptedException ex)
+                            {
+                                Thread.currentThread().interrupt();
+                            }
                             instance.dumbAi(instance.getCurrentPlayer());
                             RmPmGameState updatedInstance = new RmPmGameState(instance);
                             gameStateRef.setValue(updatedInstance);
