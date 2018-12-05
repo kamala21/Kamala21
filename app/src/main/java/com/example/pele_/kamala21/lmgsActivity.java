@@ -181,7 +181,8 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                             updateLeaderboard();
                             instance.reDeal();
                             instance.getCurrentSet().clear();
-                            gameStateRef.setValue(instance);
+                            RmPmGameState updatedInstance = new RmPmGameState(instance);
+                            gameStateRef.setValue(updatedInstance);
                         } else if (instance.getCurrentPlayer() > numHumans) {
                             try
                             {
@@ -191,7 +192,11 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                             {
                                 Thread.currentThread().interrupt();
                             }
-                            instance.dumbAi(instance.getCurrentPlayer());
+                            if(intelligence.equals("smart")){
+                                instance.smartAi(instance.getCurrentPlayer());
+                            } else {
+                                instance.dumbAi(instance.getCurrentPlayer());
+                            }
                             RmPmGameState updatedInstance = new RmPmGameState(instance);
                             gameStateRef.setValue(updatedInstance);
                         }

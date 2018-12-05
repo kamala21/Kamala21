@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -228,7 +229,8 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 updateLeaderboard();
                 instance.reDeal();
                 instance.getCurrentSet().clear();
-                gameStateRef.setValue(instance);
+                RmPmGameState updatedInstance = new RmPmGameState(instance);
+                gameStateRef.setValue(updatedInstance);
             } else if (instance.getCurrentPlayer() != playerIndex) {
                 try
                 {
@@ -238,8 +240,13 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 {
                     Thread.currentThread().interrupt();
                 }
-                instance.smartAi(instance.getCurrentPlayer());
-                gameStateRef.setValue(instance);
+                if(intelligence.equals("smart")){
+                    instance.smartAi(instance.getCurrentPlayer());
+                } else {
+                    instance.dumbAi(instance.getCurrentPlayer());
+                }
+                RmPmGameState updatedInstance = new RmPmGameState(instance);
+                gameStateRef.setValue(updatedInstance);
             } //skips over ai
         }
     }
