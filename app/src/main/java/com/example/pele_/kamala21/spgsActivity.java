@@ -240,10 +240,14 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 {
                     Thread.currentThread().interrupt();
                 }
-                if(intelligence.equals("smart")){
+                if(intelligence != null) {
+                    if (intelligence.equals("smart")) {
+                        instance.smartAi(instance.getCurrentPlayer());
+                    } else {
+                        instance.dumbAi(instance.getCurrentPlayer());
+                    }
+                } else{
                     instance.smartAi(instance.getCurrentPlayer());
-                } else {
-                    instance.dumbAi(instance.getCurrentPlayer());
                 }
                 RmPmGameState updatedInstance = new RmPmGameState(instance);
                 gameStateRef.setValue(updatedInstance);
