@@ -75,6 +75,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
     String serverID;
 
     View leaderBoard;
+    View inGameTips;
     View player3;
     View player4;
     View player5;
@@ -184,21 +185,18 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                             RmPmGameState updatedInstance = new RmPmGameState(instance);
                             gameStateRef.setValue(updatedInstance);
                         } else if (instance.getCurrentPlayer() > numHumans) {
-                            try
-                            {
+                            try {
                                 Thread.sleep(750);
-                            }
-                            catch(InterruptedException ex)
-                            {
+                            } catch (InterruptedException ex) {
                                 Thread.currentThread().interrupt();
                             }
-                            if(intelligence != null) {
+                            if (intelligence != null) {
                                 if (intelligence.equals("smart")) {
                                     instance.smartAi(instance.getCurrentPlayer());
                                 } else {
                                     instance.dumbAi(instance.getCurrentPlayer());
                                 }
-                            } else{
+                            } else {
                                 instance.smartAi(instance.getCurrentPlayer());
                             }
                             RmPmGameState updatedInstance = new RmPmGameState(instance);
@@ -216,6 +214,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
             }
         });
         leaderBoard = (View) findViewById(R.id.leaderBoardLayout);
+        inGameTips = (View) findViewById(R.id.inGameTips);
         player3 = (View) findViewById(R.id.infoP3);
         player4 = (View) findViewById(R.id.infoP4);
         player5 = (View) findViewById(R.id.infoP5);
@@ -262,6 +261,13 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                 gameStateRef.setValue(null);
                 lobbyRef.setValue(null);
                 System.exit(0);
+                return true;
+            case R.id.inGameTips:
+                if(inGameTips.getVisibility() == View.GONE){
+                    inGameTips.setVisibility(View.VISIBLE);
+                } else{
+                    inGameTips.setVisibility(View.GONE);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -726,99 +732,33 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
     public void updateOpponents() {
         int i = instance.getPlayers().size();
-        if (i < 6) {
-            fifthPlayer.setVisibility(View.INVISIBLE);
-            if (i < 5) {
-                fourthPlayer.setVisibility(View.INVISIBLE);
-                if (i < 4) {
-                    thirdPlayer.setVisibility(View.INVISIBLE);
-                    if (i < 3) {
-                        secondPlayer.setVisibility(View.INVISIBLE);
+        int count = playerIndex;
+        count = (count+1) % instance.getPlayers().size();
+        numCards1.setText(Integer.toString(instance.getPlayers().get(count).getHand().size()));
+        if (i > 2) {
+            count = (count+1) % instance.getPlayers().size();
+            numCards2.setText(Integer.toString(instance.getPlayers().get(count).getHand().size()));
+            if (i > 3) {
+                count = (count+1) % instance.getPlayers().size();
+                numCards3.setText(Integer.toString(instance.getPlayers().get(count).getHand().size()));
+                if (i > 4) {
+                    count = (count+1) % instance.getPlayers().size();
+                    numCards4.setText(Integer.toString(instance.getPlayers().get(count).getHand().size()));
+                    if (i > 5) {
+                        count = (count+1) % instance.getPlayers().size();
+                        numCards5.setText(Integer.toString(instance.getPlayers().get(count).getHand().size()));
                     }
                 }
             }
         }
-        if (playerIndex == 0) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
-                        }
-                    }
-                }
-            }
-        } else if (playerIndex == 1) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
-                        }
-                    }
-                }
-            }
-        } else if (playerIndex == 2) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-                        }
-                    }
-                }
-            }
-        } else if (playerIndex == 3) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-                        }
-                    }
-                }
-            }
-        } else if (playerIndex == 4) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(5).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                        }
-                    }
-                }
-            }
-        } else if (playerIndex == 5) {
-            numCards1.setText(Integer.toString(instance.getPlayers().get(0).getHand().size()));
-            if (i > 2) {
-                numCards2.setText(Integer.toString(instance.getPlayers().get(1).getHand().size()));
-                if (i > 3) {
-                    numCards3.setText(Integer.toString(instance.getPlayers().get(2).getHand().size()));
-                    if (i > 4) {
-                        numCards4.setText(Integer.toString(instance.getPlayers().get(3).getHand().size()));
-                        if (i > 5) {
-                            numCards5.setText(Integer.toString(instance.getPlayers().get(4).getHand().size()));
-                        }
+        if (i < 6) {
+            fifthPlayer.setVisibility(View.GONE);
+            if (i < 5) {
+                fourthPlayer.setVisibility(View.GONE);
+                if (i < 4) {
+                    thirdPlayer.setVisibility(View.GONE);
+                    if (i < 3) {
+                        secondPlayer.setVisibility(View.GONE);
                     }
                 }
             }
@@ -865,7 +805,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
             }
         }
         for (int j = 0; j < i; j++) {
-            if (instance.getPlayers().get(j).getStanding() == i-2) {
+            if (instance.getPlayers().get(j).getStanding() == i - 2) {
                 if (j == 0) {
                     standing1.setText("Rich Man");
                 } else if (j == 1) {

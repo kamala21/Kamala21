@@ -8,6 +8,58 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/inGameTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tips1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1) Must play card higher or equal in value to current set" />
+
+        <TextView
+            android:id="@+id/tips2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2) Must play same number of cards as current set" />
+
+        <TextView
+            android:id="@+id/tips3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3) Last person to play a card can start a new set if it is their turn again." />
+
+        <TextView
+            android:id="@+id/tips4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4) Playing same value card/cards skips next players turn." />
+
+        <TextView
+            android:id="@+id/tips5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5) 3 is a bomb and clears the set" />
+
+        <TextView
+            android:id="@+id/tips6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6) 4, 5, and 6 are wilds (can be any other card, if only wilds chooses to be bombs)" />
+
+        <TextView
+            android:id="@+id/tips7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="7) Poor man gives rich man their two best cards, and rich man gives poor man two worst cards." />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/leaderBoardLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

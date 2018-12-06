@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="1)  Play higher card/cards then current card/cards.  List from lowest to highest:" />
+            android:text="1)  Play card/cards with same or higher value then current card/cards.  List from lowest to highest:" />
 
         <LinearLayout
             android:layout_width="wrap_content"

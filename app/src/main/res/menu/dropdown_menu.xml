@@ -8,6 +8,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/inGameTips"
+        android:title="Show/Hide Tips"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/leaveGame"
         android:title="Leave Game"
         app:showAsAction="never" />

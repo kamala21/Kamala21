@@ -74,6 +74,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
     int serverID;
 
     View leaderBoard;
+    View inGameTips;
     View player3;
     View player4;
     View player5;
@@ -166,6 +167,7 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
         });
         gameStateRef.addValueEventListener(this);
         leaderBoard = (View) findViewById(R.id.leaderBoardLayout);
+        inGameTips = (View) findViewById(R.id.inGameTips);
         player3 = (View) findViewById(R.id.infoP3);
         player4 = (View) findViewById(R.id.infoP4);
         player5 = (View) findViewById(R.id.infoP5);
@@ -212,6 +214,13 @@ public class spgsActivity extends Activity implements View.OnClickListener, Valu
                 gameStateRef.setValue(null);
                 lobbyRef.setValue(null);
                 System.exit(0);
+                return true;
+            case R.id.inGameTips:
+                if(inGameTips.getVisibility() == View.GONE){
+                    inGameTips.setVisibility(View.VISIBLE);
+                } else{
+                    inGameTips.setVisibility(View.GONE);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

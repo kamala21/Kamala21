@@ -111,9 +111,9 @@
                     android:id="@+id/mmOptionsButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Options"
                     android:backgroundTint="@color/neon_green"
-                    android:visibility="visible" />
+                    android:text="Options"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/mmExitButton"
