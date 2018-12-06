@@ -252,7 +252,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                 lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
-                finish();
+                System.exit(0);
                 return true;
             case R.id.exitApp:
                 gameStateRef.setValue(null);

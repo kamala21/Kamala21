@@ -24,7 +24,7 @@ public class htpActivity extends Activity implements  View.OnClickListener{
             case R.id.htpReturnButton:
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
-                finish();
+                System.exit(0);
             default:
                 break;
         }
