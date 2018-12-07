@@ -11,6 +11,7 @@ public class osActivity extends Activity implements  View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        //Creates optionScreen Button in the GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_options_screen);
 
@@ -20,6 +21,7 @@ public class osActivity extends Activity implements  View.OnClickListener{
 
     @Override
     public void onClick(View v){
+        //Opens OptionScreen and closes mainmenu
         switch (v.getId()){
             case R.id.osReturnButton:
                 Intent mmIntent = new Intent(this, mmActivity.class);

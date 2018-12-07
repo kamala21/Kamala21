@@ -8,17 +8,19 @@ public class RmPmPlayerInfo {
     private int standing;
 
     public RmPmPlayerInfo(){
+        //Player info constructor
         hand = new ArrayList<RmPmCard>(13);
         wins = 0;
         standing = -1;
     }
-
+    //Info stored for each player
     public ArrayList<RmPmCard> getHand() {
         return hand;
     }
     public int getWins(){ return wins; }
     public int getStanding(){ return standing; }
 
+    //Actions for player
     public void setHand(ArrayList<RmPmCard> in){ hand = in; }
     public void addCard(RmPmCard in){
         hand.add(in);

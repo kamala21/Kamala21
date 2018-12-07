@@ -5,11 +5,13 @@ public class RmPmCard {
     private String suit;
 
     public RmPmCard(){
+        //Sets default constructor and makes a 6 of hearts card
         value = 6;
         suit = "hearts";
     }
 
     public RmPmCard(int inValue, String inSuit){
+        //Deep Copy
         value = inValue;
         suit = inSuit;
     }
@@ -22,7 +24,7 @@ public class RmPmCard {
         return suit;
     }
 
-    public String getFace(){
+    public String getFace(){ //Returns face value of card based on its game value
         int temp = this.value;
         if(temp == 0){
             return "seven";
@@ -58,7 +60,7 @@ public class RmPmCard {
         return this.getFace() +"_" +this.getSuit();
     }
 
-    public int getDrawable() {
+    public int getDrawable() {//Draws each card
         switch (this.getFace()){
             case "seven":
                 if(this.getSuit() == "clubs"){

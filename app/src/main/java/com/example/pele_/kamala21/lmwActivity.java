@@ -31,6 +31,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Creates wait screen when not all players are in the game
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_wait_screen);
 
@@ -57,6 +58,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
         numHumanInt = dataSnapshot.child("numHumans").getValue(Integer.class);
 
         if (playerIndex == 0) {
+            //When server is created
             if (numAiInt + numHumanInt + 1 == dataSnapshot.child("totalNumberOfPlayers").getValue(Integer.class)) {
                 RmPmGameState instance = new RmPmGameState(numAiInt + numHumanInt + 1);
                 gameStateRef.setValue(instance);
@@ -68,6 +70,7 @@ public class lmwActivity extends Activity implements ValueEventListener {
                 finish();
             }
         } else {
+            //When new player joins existing server
             if (dataSnapshot.child("numAi").getValue(Integer.class) + dataSnapshot.child("numHumans").getValue(Integer.class)
                     + 1 == dataSnapshot.child("totalNumberOfPlayers").getValue(Integer.class)) {
                 Intent lmgsJoinIntent = new Intent(this, lmgsActivity.class);

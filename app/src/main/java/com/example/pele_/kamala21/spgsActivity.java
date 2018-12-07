@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class spgsActivity extends Activity implements View.OnClickListener, ValueEventListener {
+    //Class is identical to lmgsActivity class
     RmPmGameState instance;
     ImageButton card0;
     ImageButton card1;

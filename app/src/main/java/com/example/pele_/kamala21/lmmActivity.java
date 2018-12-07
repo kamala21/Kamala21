@@ -42,6 +42,7 @@ public class lmmActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Creates multi player menu screen and all contents in the menu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_local_multiplayer_menu);
 
@@ -76,7 +77,7 @@ public class lmmActivity extends Activity implements View.OnClickListener {
         numPlayersRef = lobbyRef.child("totalNumberOfPlayers");
         numPlayersRef.setValue(numHumanInt + 1);
         diffAIRef = lobbyRef.child("intelligence");
-        diffAIRef.setValue("dumb");
+        diffAIRef.setValue("dumb");//sets values off AI to dumb
         numHumanRef = lobbyRef.child("numHumans");
         numHumanRef.setValue(numHumanInt);
         numAiRef = lobbyRef.child("numAi");
@@ -86,13 +87,13 @@ public class lmmActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lmmReturnButton:
+            case R.id.lmmReturnButton://exits multi player menu and opens main menu
                 lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 finish();
                 break;
-            case R.id.lmmStartServerButton:
+            case R.id.lmmStartServerButton://Starts multi player server and opens wait screen
                 numHumanRef.setValue(0);
                 Intent lmgsIntent = new Intent(this, lmwActivity.class);
                 lmgsIntent.putExtra("playerIndex", 0);
@@ -100,14 +101,15 @@ public class lmmActivity extends Activity implements View.OnClickListener {
                 startActivity(lmgsIntent);
                 finish();
                 break;
-            case R.id.lmmIncreaseButton:
+            case R.id.lmmIncreaseButton://sets AI value to smart
                 diffAIRef.setValue("smart");
                 difficulty.setText("smart");
                 break;
-            case R.id.lmmDecreaseButton:
+            case R.id.lmmDecreaseButton://Sets AI value to dumb
                 diffAIRef.setValue("dumb");
                 difficulty.setText("dumb");
                 break;
+                //Next two buttons add or drop AI players
             case R.id.lmmAddButton:
                 if (numAiInt + numHumanInt < 5) {
                     numAiInt++;
@@ -124,6 +126,7 @@ public class lmmActivity extends Activity implements View.OnClickListener {
                     numPlayersRef.setValue(numAiInt + numHumanInt + 1);
                 }
                 break;
+                //Next two buttons add or drop Human players
             case R.id.lmmAddHumanButton:
                 if (numAiInt + numHumanInt < 5) {
                     numHumanInt++;

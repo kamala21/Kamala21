@@ -38,6 +38,7 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Creates mainmenu and all its items when App is opened
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_main_menu);
 
@@ -79,6 +80,7 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        //Checks if multi player server name exists
         if (dataSnapshot.hasChild("multiPlayerLobby" + joinServerID.getText())) {
             if (dataSnapshot.child("multiPlayerLobby" + joinServerID.getText().toString()).child("numHumans").getValue(Integer.class) != null) {
                 playerIndex = dataSnapshot.child("multiPlayerLobby" + joinServerID.getText().toString()).child("numHumans").getValue(Integer.class) + 1;
@@ -97,27 +99,27 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.mmExitButton:
+            case R.id.mmExitButton://Exit app
                 System.exit(0);
                 break;
-            case R.id.mmRulesButton:
+            case R.id.mmRulesButton://Opens rules screen and closes main menu
                 Intent htpIntent = new Intent(this, htpActivity.class);
                 startActivity(htpIntent);
                 finish();
                 break;
-            case R.id.mmSingleButton:
+            case R.id.mmSingleButton: //Opens single player menu and closes main menu
                 Intent spmIntent = new Intent(this, spmActivity.class);
                 soloServerID = (int)(Math.random() * 200);
                 spmIntent.putExtra("serverID", soloServerID);
                 startActivity(spmIntent);
                 finish();
                 break;
-            case R.id.mmOptionsButton:
+            case R.id.mmOptionsButton: //Open options screen and closes main menu
                 Intent osIntent = new Intent(this, osActivity.class);
                 startActivity(osIntent);
                 finish();
                 break;
-            case R.id.mmLocalButton:
+            case R.id.mmLocalButton://Opens multi player menu and closes main menu
                 if (!serverExists) {
                     Intent lmmIntent = new Intent(this, lmmActivity.class);
                     lmmIntent.putExtra("serverID", startServerID.getText().toString());
@@ -127,7 +129,7 @@ public class mmActivity extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(this.getApplicationContext(), "Server already exists", Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case R.id.mmJoinButton:
+            case R.id.mmJoinButton://Button to join a game if the server exists
                 if (serverExists) {
                     Intent lmgsJoinIntent = new Intent(this, lmwActivity.class);
                     lmgsJoinIntent.putExtra("playerIndex", playerIndex);

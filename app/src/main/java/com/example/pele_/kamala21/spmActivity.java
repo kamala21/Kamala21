@@ -30,6 +30,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        //Creates items in single player mode menu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_single_player_menu);
 
@@ -61,14 +62,15 @@ public class spmActivity extends Activity implements  View.OnClickListener{
 
     @Override
     public void onClick(View v){
+        //Defines actions for each item when clicked
         switch (v.getId()){
-            case R.id.spmReturnButton:
+            case R.id.spmReturnButton://Return to mainmenu when button is clicked
                 lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 finish();
                 break;
-            case R.id.spmStartButton:
+            case R.id.spmStartButton://Starts a single player game
                 RmPmGameState instance = new RmPmGameState(numInt+1);
                 gameStateRef.setValue(instance);
                 Intent spgsIntent = new Intent(this, spgsActivity.class);
@@ -76,6 +78,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
                 startActivity(spgsIntent);
                 finish();
                 break;
+                //Next two buttons set AI difficulty
             case R.id.spmIncreaseButton:
                 diffAIRef.setValue("smart");
                 difficulty.setText("smart");
@@ -84,6 +87,7 @@ public class spmActivity extends Activity implements  View.OnClickListener{
                 diffAIRef.setValue("dumb");
                 difficulty.setText("dumb");
                 break;
+                //Next two buttons add and remove AI players
             case R.id.spmAddButton:
                 if(numInt+1 < 6){
                     numInt++;

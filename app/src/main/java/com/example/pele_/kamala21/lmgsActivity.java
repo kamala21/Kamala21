@@ -26,6 +26,7 @@ import java.util.Comparator;
 
 public class lmgsActivity extends Activity implements View.OnClickListener {
     RmPmGameState instance;
+    //All contents of the multi player game screen
     ImageButton card0;
     ImageButton card1;
     ImageButton card2;
@@ -95,6 +96,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //creates the textViews, buttons, etc. of the game screen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_game_screen);
 
@@ -102,6 +104,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         serverID = getIntent().getStringExtra("serverID");
         numHumans = getIntent().getIntExtra("numHumans", 0);
         whoAmI = (TextView) findViewById(R.id.whoAmITextView);
+        //Tells the local player which player they are
         whoAmI.setText("You Are: P" + Integer.toString(playerIndex + 1));
         count = 0;
         card0 = (ImageButton) findViewById(R.id.card0);
@@ -135,6 +138,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         passButton = (Button) findViewById(R.id.passTurnButton);
         passButton.setOnClickListener(this);
         currentPlayerText = (TextView) findViewById(R.id.currentPlayerText);
+        //displays the number of cards for each player
         numCards1 = (TextView) findViewById(R.id.numCardsP1);
         numCards2 = (TextView) findViewById(R.id.numCardsP2);
         numCards3 = (TextView) findViewById(R.id.numCardsP3);
@@ -155,6 +159,8 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         currentSet7 = (ImageView) findViewById(R.id.currentSet7);
         currentSet8 = (ImageView) findViewById(R.id.currentSet8);
         currentSet9 = (ImageView) findViewById(R.id.currentSet9);
+        //used https://developer.android.com/studio/write/firebase to figure out how to connect to firebase
+        //firebase used to store multi player game data
         database = FirebaseDatabase.getInstance();
         gameStateRef = database.getReference().child("multiPlayerGameState" + serverID);
         lobbyRef = database.getReference().child("multiPlayerLobby" + serverID);
@@ -219,12 +225,14 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         player4 = (View) findViewById(R.id.infoP4);
         player5 = (View) findViewById(R.id.infoP5);
         player6 = (View) findViewById(R.id.infoP6);
+        //displays the win total for each player
         wins1 = (TextView) findViewById(R.id.wins1);
         wins2 = (TextView) findViewById(R.id.wins2);
         wins3 = (TextView) findViewById(R.id.wins3);
         wins4 = (TextView) findViewById(R.id.wins4);
         wins5 = (TextView) findViewById(R.id.wins5);
         wins6 = (TextView) findViewById(R.id.wins6);
+        //displays the standings of each player
         standing1 = (TextView) findViewById(R.id.standing1);
         standing2 = (TextView) findViewById(R.id.standing2);
         standing3 = (TextView) findViewById(R.id.standing3);
@@ -235,6 +243,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        //creates a dropdown option menu
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.dropdown_menu, menu);
         return true;
@@ -242,27 +251,28 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //defines an action for each item in the options menu
         switch (item.getItemId()) {
-            case R.id.leaderboard:
+            case R.id.leaderboard: //makes leaderboard show when user selects the leaderboard item
                 if (leaderBoard.getVisibility() == View.GONE) {
                     leaderBoard.setVisibility(View.VISIBLE);
                 } else {
                     leaderBoard.setVisibility(View.GONE);
                 }
                 return true;
-            case R.id.leaveGame:
+            case R.id.leaveGame: //exits gamescreen and opens mainmenu when leaveGame item is selected
                 gameStateRef.setValue(null);
                 lobbyRef.setValue(null);
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 System.exit(0);
                 return true;
-            case R.id.exitApp:
+            case R.id.exitApp: //exits the whole app when exitApp item is selected
                 gameStateRef.setValue(null);
                 lobbyRef.setValue(null);
                 System.exit(0);
                 return true;
-            case R.id.inGameTips:
+            case R.id.inGameTips: //Makes GameTips menu visible
                 if(inGameTips.getVisibility() == View.GONE){
                     inGameTips.setVisibility(View.VISIBLE);
                 } else{
@@ -276,6 +286,8 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        //Highlights card when clicked if card is valid (not already selected or playable)
+        //Unhighlights card when another card is selected
         switch (v.getId()) {
             case R.id.card0:
                 if (card0.getColorFilter() == null) {
@@ -520,6 +532,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
     }
 
     public void updateCards() {
+        //Updates players hand i.e. adds or takes away cards
         card0.setColorFilter(null);
         card1.setColorFilter(null);
         card2.setColorFilter(null);
@@ -647,6 +660,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
     }
 
     public void updateCurrentSet() {
+        //Updates the set when a card is played
         int i = instance.getCurrentSet().size();
         if (i > 0) {
             currentSet0.setVisibility(View.GONE);
@@ -730,7 +744,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void updateOpponents() {
+    public void updateOpponents() {//Updates amount of cards each player has
         int i = instance.getPlayers().size();
         int count = playerIndex;
         count = (count+1) % instance.getPlayers().size();
@@ -765,7 +779,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void updateTurn() {
+    public void updateTurn() {//Updates whose turn it is
         String output = "Current Player: P" + Integer.toString(instance.getCurrentPlayer() + 1);
         currentPlayerText.setText(output);
     }
@@ -804,7 +818,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
                 }
             }
         }
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j < i; j++) {//Sets a rich man and a poor man based on player standings
             if (instance.getPlayers().get(j).getStanding() == i - 2) {
                 if (j == 0) {
                     standing1.setText("Rich Man");
@@ -837,7 +851,7 @@ public class lmgsActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    public void updateScreen() {
+    public void updateScreen() {//Update info on screen
         updateOpponents();
         updateCards();
         updateCurrentSet();

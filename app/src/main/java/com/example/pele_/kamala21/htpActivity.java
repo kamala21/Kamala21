@@ -11,6 +11,7 @@ public class htpActivity extends Activity implements  View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
+        //creates a How to Play button in the GUI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.rmpm_how_to_play);
 
@@ -20,11 +21,13 @@ public class htpActivity extends Activity implements  View.OnClickListener{
 
     @Override
     public void onClick(View v){
+        //exits the current activity and goes to the htpActivity
         switch (v.getId()){
             case R.id.htpReturnButton:
                 Intent mmIntent = new Intent(this, mmActivity.class);
                 startActivity(mmIntent);
                 System.exit(0);
+                //looked at https://developer.android.com/training/basics/firstapp/starting-activity for help
             default:
                 break;
         }
